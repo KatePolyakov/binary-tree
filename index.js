@@ -4,7 +4,7 @@ nodes.
 Implement a binary tree data structure with the following functions:
 a) Insert a node to the binary tree 
 b) Swap two nodes on the binary tree
-! c) An algorithm to Sort the binary tree (https://en.wikipedia.org/wiki/Tree_sort)
+c) An algorithm to Sort the binary tree (https://en.wikipedia.org/wiki/Tree_sort)
 ! d) Remove a node from the binary tree without breaking the remaining tree structure
 
 Problem #2
@@ -21,14 +21,14 @@ c) implement a breadth first search algorithm
 class TreeNode {
   constructor(value) {
     this.value = value;
-    this.left = undefined;
-    this.right = undefined;
+    this.left = null;
+    this.right = null;
   }
 }
 
 class BinaryTree {
   constructor() {
-    this.root = undefined;
+    this.root = null;
   }
 
   // a) Insert a node to the binary tree
@@ -74,11 +74,28 @@ class BinaryTree {
     }
   }
 
-  findNode(node, value) {
-    if (node === null) return null;
-    if (node.value === value) return node;
+  findNode(currentNode, value) {
+    if (currentNode === null) return null;
+    if (currentNode.value === value) return currentNode;
 
-    return value < node.value ? this.findNode(node.left, value) : this.findNode(node.right, value);
+    return value < currentNode.value
+      ? this.findNode(currentNode.left, value)
+      : this.findNode(currentNode.right, value);
+  }
+
+  // c) Algorithm to sort the binary tree (Tree Sort)
+  sort() {
+    const sortedArr = [];
+    this.inOrderSort(this.root, sortedArr);
+    return sortedArr;
+  }
+
+  inOrderSort(currentNode, array) {
+    if (currentNode !== null) {
+      this.inOrderSort(currentNode.left, array);
+      array.push(currentNode.value);
+      this.inOrderSort(currentNode.right, array);
+    }
   }
 
   // b) implement a depth-first search algorithm
@@ -176,6 +193,11 @@ console.log('Binary Tree', myTree);
 2   6       20
           11
 */
+
+/* Uncommit for result of Swap */
+
+// myTree.swap(5, 10);
+// console.log('Tree sorted after swapping 5 and 10:', myTree.sort());
 
 /* Uncommit for result Depth-first search, pre-order */
 
