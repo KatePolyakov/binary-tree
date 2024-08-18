@@ -5,7 +5,7 @@ Implement a binary tree data structure with the following functions:
 a) Insert a node to the binary tree 
 b) Swap two nodes on the binary tree
 c) An algorithm to Sort the binary tree (https://en.wikipedia.org/wiki/Tree_sort)
-! d) Remove a node from the binary tree without breaking the remaining tree structure
+d) Remove a node from the binary tree without breaking the remaining tree structure
 
 Problem #2
 
@@ -98,6 +98,39 @@ class BinaryTree {
     }
   }
 
+  // d) Remove a node from the binary tree without breaking the remaining tree structure
+
+  remove(value) {
+    this.root = this.removeNode(this.root, value);
+  }
+
+  removeNode(currentNode, value) {
+    if (currentNode === null) return null;
+
+    if (value < currentNode.value) {
+      currentNode.left = this.removeNode(currentNode.left, value);
+    } else if (value > currentNode.value) {
+      currentNode.right = this.removeNode(currentNode.right, value);
+    } else {
+      // Node with only one child or no child
+      if (currentNode.left === null) return currentNode.right;
+      if (currentNode.right === null) return currentNode.left;
+
+      // Node with two children: Get the inorder successor (smallest in the right subtree)
+      currentNode.value = this.minNode(currentNode.right).value;
+      currentNode.right = this.removeNode(currentNode.right, currentNode.value);
+    }
+    return currentNode;
+  }
+
+  minNode(currentNode) {
+    let current = currentNode;
+    while (current.left !== null) {
+      current = current.left;
+    }
+    return current;
+  }
+
   // b) implement a depth-first search algorithm
 
   preOrder(node, callback) {
@@ -185,6 +218,7 @@ myTree.add(2);
 myTree.add(11);
 
 console.log('Binary Tree', myTree);
+console.log('Binary Tree Sort', myTree.sort());
 
 /* Binary Tree
       8
@@ -194,12 +228,18 @@ console.log('Binary Tree', myTree);
           11
 */
 
-/* Uncommit for result of Swap */
+/* Uncomment for result of Swap */
 
 // myTree.swap(5, 10);
 // console.log('Tree sorted after swapping 5 and 10:', myTree.sort());
 
-/* Uncommit for result Depth-first search, pre-order */
+/* Uncomment for result of remove node */
+
+// myTree.remove(7);
+// console.log('Tree sorted after removing 7:', myTree);
+// console.log('Tree sorted after removing 7:', myTree.sort());
+
+/* Uncomment for result Depth-first search, pre-order */
 
 // myTree.traverseDFS((node) => {
 //   console.log('Depth-first search, pre-order', node.value);
@@ -209,7 +249,7 @@ console.log('Binary Tree', myTree);
   8, 7, 5, 2, 6, 9, 10, 20, 11
 */
 
-/* Uncommit for result Depth-first search, in-order */
+/* Uncomment for result Depth-first search, in-order */
 
 // myTree.traverseDFS((node) => {
 //   console.log('Depth-first search, in-order', node.value);
@@ -219,22 +259,22 @@ console.log('Binary Tree', myTree);
   2, 5, 6, 7, 8, 9, 10, 11, 20
 */
 
-/* Uncommit for result Depth-first search, post-order */
+/* Uncomment for result Depth-first search, post-order */
 
 // myTree.traverseDFS((node) => {
 //   console.log('Depth-first search, post-order', node.value);
 // }, 'postOrder');
 
-/* Depth-first search, in-order: 
+/* Depth-first search, post-order: 
   2, 6, 5, 7, 11, 20, 10, 9, 8
 */
 
-/* Uncommit for result Breadth-first search algorithm */
+/* Uncomment for result Breadth-first search algorithm */
 
 // myTree.traverseBFS((node) => {
 //   console.log('Breadth-first search', node.value);
 // });
 
-/* Depth-first search, in-order: 
+/* Breadth-first search algorithm: 
   8, 7, 9, 5, 10, 2, 6, 20, 11
 */
