@@ -3,8 +3,8 @@ A binary tree is a data structure where each node in the tree has two, one, or n
 nodes.
 Implement a binary tree data structure with the following functions:
 a) Insert a node to the binary tree 
-! b) Swap two nodes on the binary tree
-c) An algorithm to Sort the binary tree (https://en.wikipedia.org/wiki/Tree_sort)
+b) Swap two nodes on the binary tree
+! c) An algorithm to Sort the binary tree (https://en.wikipedia.org/wiki/Tree_sort)
 ! d) Remove a node from the binary tree without breaking the remaining tree structure
 
 Problem #2
@@ -31,6 +31,8 @@ class BinaryTree {
     this.root = undefined;
   }
 
+  // a) Insert a node to the binary tree
+
   add(value) {
     const newNode = new TreeNode(value);
     if (!this.root) {
@@ -56,6 +58,30 @@ class BinaryTree {
       }
     }
   }
+
+  // b) Swap two nodes on the binary tree
+
+  swap(nodeOne, nodeTwo) {
+    const node1 = this.findNode(this.root, nodeOne);
+    const node2 = this.findNode(this.root, nodeTwo);
+
+    if (node1 && node2) {
+      const temp = node1.value;
+      node1.value = node2.value;
+      node2.value = temp;
+    } else {
+      console.log('Cannot find');
+    }
+  }
+
+  findNode(node, value) {
+    if (node === null) return null;
+    if (node.value === value) return node;
+
+    return value < node.value ? this.findNode(node.left, value) : this.findNode(node.right, value);
+  }
+
+  // b) implement a depth-first search algorithm
 
   preOrder(node, callback) {
     if (!node) {
@@ -108,6 +134,8 @@ class BinaryTree {
 
     return this.postOrder(this.root, callback);
   }
+
+  // c) implement a breadth first search algorithm
 
   traverseBFS(callback) {
     const queue = [this.root];
@@ -181,9 +209,9 @@ console.log('Binary Tree', myTree);
 
 /* Uncommit for result Breadth-first search algorithm */
 
-myTree.traverseBFS((node) => {
-  console.log('Breadth-first search', node.value);
-});
+// myTree.traverseBFS((node) => {
+//   console.log('Breadth-first search', node.value);
+// });
 
 /* Depth-first search, in-order: 
   8, 7, 9, 5, 10, 2, 6, 20, 11
