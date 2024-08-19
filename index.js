@@ -11,7 +11,7 @@ Problem #2
 
 Using your tree from Problem #1,
 
-! a) Implement a brute force search algorithm
+a) Implement a brute force search algorithm
 b) implement a depth-first search algorithm
 c) implement a breadth first search algorithm
 ! d) insert a large number of nodes into your tree (10,000; 100,000; 1,000,000), measure the performance of each of your search algorithms (time to complete), comment on the BigO complexity of each (Best case, average case, worst case)
@@ -131,6 +131,52 @@ class BinaryTree {
     return current;
   }
 
+  // a) Implement a brute force search algorithm
+
+  // Helper method to find the path from root to a given node
+  findPath(node, path, value) {
+    if (node === null) return false;
+
+    // Add the current node to the path
+    path.push(node.value);
+
+    // Check if the current node is the target
+    if (node.value === value) return true;
+
+    // Recursively check in left and right subtrees
+    if (
+      (node.left && this.findPath(node.left, path, value)) ||
+      (node.right && this.findPath(node.right, path, value))
+    ) {
+      return true;
+    }
+
+    // If the node is not in the current path, remove it
+    path.pop();
+    return false;
+  }
+
+  // Brute force method to find the distance between two nodes
+  findBrute(value1, value2) {
+    const path1 = [];
+    const path2 = [];
+
+    // Find paths from root to value1 and value2
+    if (!this.findPath(this.root, path1, value1) || !this.findPath(this.root, path2, value2)) {
+      return -1; // If either node is not found in the tree
+    }
+
+    // Find the first common node (Lowest Common Ancestor - LCA)
+    let i = 0;
+    while (i < path1.length && i < path2.length && path1[i] === path2[i]) {
+      i++;
+    }
+
+    // Distance = (distance from root to value1) + (distance from root to value2) - 2 * (distance from root to LCA)
+    const distance = path1.length - i + (path2.length - i);
+    return distance;
+  }
+
   // b) implement a depth-first search algorithm
 
   preOrder(node, callback) {
@@ -238,6 +284,12 @@ console.log('Binary Tree Sort', myTree.sort());
 // myTree.remove(7);
 // console.log('Tree sorted after removing 7:', myTree);
 // console.log('Tree sorted after removing 7:', myTree.sort());
+
+/*     PROBLEM #2      */
+
+/* Uncomment for result Implement a brute force search algorithm */
+
+//console.log('Distance between 2 and 11:', myTree.findBrute(2, 11)); //7
 
 /* Uncomment for result Depth-first search, pre-order */
 
