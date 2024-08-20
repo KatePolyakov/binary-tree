@@ -14,7 +14,7 @@ Using your tree from Problem #1,
 a) Implement a brute force search algorithm
 b) implement a depth-first search algorithm
 c) implement a breadth first search algorithm
-! d) insert a large number of nodes into your tree (10,000; 100,000; 1,000,000), measure the performance of each of your search algorithms (time to complete), comment on the BigO complexity of each (Best case, average case, worst case)
+d) insert a large number of nodes into your tree (10,000; 100,000; 1,000,000), measure the performance of each of your search algorithms (time to complete), comment on the BigO complexity of each (Best case, average case, worst case)
 
 */
 
@@ -72,6 +72,11 @@ class BinaryTree {
     } else {
       console.log('Cannot find');
     }
+  }
+
+  // Searches for a value in the tree for measure
+  searchNode(value) {
+    return this.findNode(this.root, value);
   }
 
   findNode(currentNode, value) {
@@ -133,17 +138,12 @@ class BinaryTree {
 
   // a) Implement a brute force search algorithm
 
-  // Helper method to find the path from root to a given node
   findPath(node, path, value) {
     if (node === null) return false;
-
-    // Add the current node to the path
     path.push(node.value);
 
-    // Check if the current node is the target
     if (node.value === value) return true;
 
-    // Recursively check in left and right subtrees
     if (
       (node.left && this.findPath(node.left, path, value)) ||
       (node.right && this.findPath(node.right, path, value))
@@ -151,28 +151,23 @@ class BinaryTree {
       return true;
     }
 
-    // If the node is not in the current path, remove it
     path.pop();
     return false;
   }
 
-  // Brute force method to find the distance between two nodes
   findBrute(value1, value2) {
     const path1 = [];
     const path2 = [];
 
-    // Find paths from root to value1 and value2
     if (!this.findPath(this.root, path1, value1) || !this.findPath(this.root, path2, value2)) {
-      return -1; // If either node is not found in the tree
+      return -1;
     }
 
-    // Find the first common node (Lowest Common Ancestor - LCA)
     let i = 0;
     while (i < path1.length && i < path2.length && path1[i] === path2[i]) {
       i++;
     }
 
-    // Distance = (distance from root to value1) + (distance from root to value2) - 2 * (distance from root to LCA)
     const distance = path1.length - i + (path2.length - i);
     return distance;
   }
@@ -250,6 +245,48 @@ class BinaryTree {
     }
   }
 }
+
+function measurePerformance(nodeCounts) {
+  nodeCounts.forEach((count) => {
+    const myTreeTwo = new BinaryTree();
+    const values = new Set(); // built-in object in JavaScript. It was introduced in ECMAScript 2015 (ES6) and provides a collection of unique values
+
+    while (values.size < count) {
+      values.add(Math.floor(Math.random() * count));
+    }
+
+    console.log(`Inserting ${count} unique nodes...`);
+    console.time(`Insert ${count} nodes`);
+    values.forEach((value) => myTreeTwo.add(value));
+    console.timeEnd(`Insert ${count} nodes`);
+
+    // Comments on Big O complexity for insertion
+    console.log(`Insertion Complexity:`);
+    console.log(`- Best Case: O(1) (Inserting into an empty tree)`);
+    console.log(`- Average Case: O(log n) (Inserting in a balanced tree)`);
+    console.log(`- Worst Case: O(n) (Inserting in an unbalanced tree)`);
+
+    // Measure search time
+    const searchValue = Array.from(values)[Math.floor(Math.random() * values.size)]; // Search for a value in the tree
+    console.log(`Searching for value ${searchValue} in ${count} nodes...`);
+    console.time(`Search in ${count} nodes`);
+    const found = myTreeTwo.searchNode(searchValue);
+    console.timeEnd(`Search in ${count} nodes`); 
+
+    // Comments on Big O complexity for search
+    console.log(`Search Complexity:`);
+    console.log(`- Best Case: O(1) (Value is at the root)`);
+    console.log(`- Average Case: O(log n) (Searching in a balanced tree)`);
+    console.log(`- Worst Case: O(n) (Searching in an unbalanced tree)`);
+
+    console.log(
+      `Search result for value ${searchValue}: ${found ? 'Value found' : 'Value not found'}`,
+    );
+    console.log('--------------------');
+  });
+}
+
+measurePerformance([10000, 100000, 1000000]);
 
 const myTree = new BinaryTree();
 
